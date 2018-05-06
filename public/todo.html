@@ -1,0 +1,21 @@
+﻿<link rel="stylesheet" type="text/css" href="style/style.css">
+
+<div id="myDIV" class="header">
+    <h2 style="margin:5px"><span ng-bind="user"></span>'s Todo List</h2>
+    <form ng-submit="addTask()">
+        <input type="text" placeholder="Title..." ng-model="taskName" />
+        <input type="submit" class="addBtn" value="Add" />
+    </form>
+</div>
+
+<div ng-repeat="ta in taskSet">
+    <ul id="myUL">
+        <li ng-class ="{checked: ta.done}">
+            <!--<input type="checkbox" ng-model="ta.done" ng-change="saveTaskSet(ta)"/>-->
+            <div ng-click="saveTaskSet(ta)">
+                <span ng-bind="ta.taskName" ng-style="{'text-decoration' : (ta.done) ? 'line-through' : 'none' }"></span>
+            </div>
+            <div ng-click="deleteTask(ta)" class="close">x</div>
+        </li>
+    </ul>
+</div>

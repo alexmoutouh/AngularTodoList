@@ -1,0 +1,13 @@
+<form class="form-signin" id="formSignin" ng-submit="login()">
+    <h1 class="h3 mb-3 font-weight-normal">Se connecter</h1>
+    <label for="inputEmail" class="sr-only">Login</label>
+    <input type="text" id="inputEmail" class="form-control" placeholder="Login" ng-model="log" required autofocus>
+    <label for="inputPassword" class="sr-only">Mot de passe</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Mot de passe" ng-model="pass" required>
+    <input type="submit" class="btn btn-lg btn-success btn-block" value="Se connecter"/>
+    <div id="msgLog" style="color: red" ng-bind="msg"> test lol </div>
+
+    <a ui-sref="home" ui-sref-active="active"> S'inscrire </a>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+</form>
+    
