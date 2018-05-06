@@ -2,12 +2,14 @@ routingApp.controller('todoCtrl', ['$scope', '$http', 'todoService', function($s
     $scope.taskSet = [];
 
     $scope.getUser = function() {
+        console.log("getting user...");
         todoService.getUser(function(userResp) {
             console.log("userresp " + userResp);
             $scope.user = userResp;
         });
     };
     $scope.addTask = function() {
+        console.log("adding...")
         if($scope.taskName) {
             todoService.addTask($scope.taskName, function(resp) {
                 if(resp) {
@@ -33,6 +35,7 @@ routingApp.controller('todoCtrl', ['$scope', '$http', 'todoService', function($s
         });
     };
     $scope.refreshTaskSet = function() {
+        console.log("refreshing...");
         todoService.getTaskSet(function(taskSet) {
             $scope.taskSet = taskSet;
         });

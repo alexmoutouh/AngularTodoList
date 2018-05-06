@@ -1,10 +1,9 @@
-﻿<link rel="stylesheet" type="text/css" href="style/style.css">
+﻿<h1 class="h1 mb-1 font-weight-normal"><span ng-bind="user"></span>'s Todo List</h1>
 
-<div id="myDIV" class="header">
-    <h2 style="margin:5px"><span ng-bind="user"></span>'s Todo List</h2>
+<div class="header">
     <form ng-submit="addTask()">
-        <input type="text" placeholder="Title..." ng-model="taskName" />
-        <input type="submit" class="addBtn" value="Add" />
+        <input type="text" id="inputTask" class="form-control" placeholder="Task..." ng-model="taskName" />
+        <input type="submit" class="btn btn-sm btn-success btn-block" value="Add" />
     </form>
 </div>
 

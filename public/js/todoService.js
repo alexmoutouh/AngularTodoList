@@ -1,5 +1,6 @@
 routingApp.factory('todoService', ['$http', function($http) {
 	var serv = {};
+
 	serv.getUser = function(cb) {
 		$http.post('/getUser').then(function(resp) {
 			cb(resp.data.user);

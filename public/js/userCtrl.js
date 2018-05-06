@@ -17,7 +17,7 @@ routingApp.controller('userCtrl', ['$scope', '$http', '$window', 'userService', 
                     document.getElementById("msgLog").style.display = "flex";
                     $scope.msg = msg;
                 } else {
-                    $window.location.href = "/todo.html";
+                    $window.location.href = "/#!/todo";
                 }
             });
         } else {
@@ -53,7 +53,7 @@ routingApp.controller('userCtrl', ['$scope', '$http', '$window', 'userService', 
                             document.getElementById("msgLog").style.display = "flex";
                             $scope.msg = msg;
                         } else {
-                            $window.location.href = "/todo.html";
+                            $window.location.href = "/#!/todo";
                         }
                     });
                 }
