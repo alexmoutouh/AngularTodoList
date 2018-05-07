@@ -1,11 +1,25 @@
-routingApp.controller('todoCtrl', ['$scope', '$http', 'todoService', function($scope, $http, todoService) {
+routingApp.controller('todoCtrl', ['$scope', '$http', '$window', 'todoService', function($scope, $http, $window, todoService) {
     $scope.taskSet = [];
 
     $scope.getUser = function() {
         console.log("getting user...");
         todoService.getUser(function(userResp) {
-            console.log("userresp " + userResp);
-            $scope.user = userResp;
+            console.log("user logged : " + userResp);
+            if(userResp) {
+                $scope.user = userResp;
+            } else {
+                $window.location.href = "/#!/signin";
+            }
+        });
+    };
+    $scope.logout = function() {
+        console.log("logging out...");
+        todoService.logout(function(success) {
+            if(!success) {
+                console.log("An error occured while logging out.");
+            } else {
+                $window.location.href = "/#!/signin";
+            }
         });
     };
     $scope.addTask = function() {

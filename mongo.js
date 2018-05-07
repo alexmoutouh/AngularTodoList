@@ -14,7 +14,8 @@ mongoose.connect('mongodb://localhost/todo', function(err) {
 var TaskSchema = Schema({
 	_id: String,
 	taskName: String,
-	done: Boolean 
+	done: Boolean,
+	user: String
 });
 
 var UserSchema = Schema({
@@ -51,22 +52,26 @@ module.exports = {
 		
 				userSamp.save(function(err) {
 					if(err) {throw err;}
-					cb(userSet);
+					cb(true);
 				});
+			} else {
+				cb(false);
 			}
 		});
 	},
-	getTaskSet: function(cb) {
-		TaskModel.find(null, function(err, taskSet) {
+	getTaskSet: function(user, cb) {
+		TaskModel.find({user: user}, function(err, taskSet) {
 			if(err) throw err;
+			console.log(user + "'s taskset : " + taskSet);
 			cb(taskSet);
 		});
 	},
-	addTaskSet: function(taskName, cb) {
+	addTaskSet: function(task, cb) {
 		var taskSamp = new TaskModel({
 			_id: uuidv4(),
-			taskName: taskName,
-			done: false
+			taskName: task.name,
+			done: false,
+			user: task.user
 		});
 
 		taskSamp.save(function(err) {

@@ -6,6 +6,11 @@ routingApp.factory('todoService', ['$http', function($http) {
 			cb(resp.data.user);
 		});
 	};
+	serv.logout = function(cb) {
+		$http.post('/logout').then(function(resp) {
+			cb(resp.data.success);
+		});
+	};
 	serv.addTask = function(name, cb) {
 			var req = {
 				name : name

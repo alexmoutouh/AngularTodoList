@@ -20,7 +20,7 @@ app.use(function(req, res, next) {
 
 var taskSet = [];
 var port = 8092;
-var userID = "no user";
+var userID = null;
 
 app.post('/login', function(req, res) {
 	console.log("Trying login " + req.body.login + " " + req.body.password + "... ");
@@ -45,15 +45,15 @@ app.post('/login', function(req, res) {
 });
 
 app.post('/register', function(req, res) {
-	dataTaskLayer.regCheck(req.body, function(user) {
+	dataTaskLayer.regCheck(req.body, function(success) {
 		console.log("Registering " + req.body.login + " " + req.body.password + "... ");
-		if(user != null) {
-			console.log("Found " + user + "fail");
+		if(!success) {
+			console.log("Found : " + success + "fail");
 			var obj = {
 				success: false
 			};
 		} else {
-			console.log("Found " + user + "success");
+			console.log("Found " + success + "success");
 			var obj = {
 				success: true
 			};
@@ -71,8 +71,14 @@ app.post('/getUser', function(req, res) {
 	res.send(obj);
 });
 
+app.post('/logout', function(req, res) {
+	userID = null;
+	taskSet.length = 0; // clear
+	res.send({success: true});
+});
+
 app.post('/getTaskSet', function(req, res) {
-	dataTaskLayer.getTaskSet(function(taskSet) {	
+	dataTaskLayer.getTaskSet(userID, function(taskSet) {	
 		var obj = {
 			success: true,
 			taskSet: taskSet
@@ -89,14 +95,12 @@ app.post('/addTask', function(req, res) {
 			errorSet: ['TASKNAME_EMPTY']
 		});
 	} else {
-		dataTaskLayer.addTaskSet(req.body.name, function() {
-/*			var obj = {
-				success: true,
-				taskSet: taskSet
-			};
-
-			res.send(obj);*/
-
+		var userTask = {
+			name: req.body.name,
+			done: false,
+			user: userID
+		}
+		dataTaskLayer.addTaskSet(userTask, function() {
 			var task = {
 				_id : uuidv4(),
 				taskName : req.body.name,
