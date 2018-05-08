@@ -14,11 +14,11 @@ routingApp.controller('todoCtrl', ['$scope', '$http', '$window', 'todoService', 
     };
     $scope.logout = function() {
         console.log("logging out...");
-        todoService.logout(function(success) {
-            if(!success) {
+        todoService.logout(function(url) {
+            if(!url) {
                 console.log("An error occured while logging out.");
             } else {
-                $window.location.href = "/#!/signin";
+                $window.location.href = url;
             }
         });
     };

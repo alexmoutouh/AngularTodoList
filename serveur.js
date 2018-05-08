@@ -74,7 +74,7 @@ app.post('/getUser', function(req, res) {
 app.post('/logout', function(req, res) {
 	userID = null;
 	taskSet.length = 0; // clear
-	res.send({success: true});
+	res.send({url: '/'});
 });
 
 app.post('/getTaskSet', function(req, res) {

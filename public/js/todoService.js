@@ -8,16 +8,16 @@ routingApp.factory('todoService', ['$http', function($http) {
 	};
 	serv.logout = function(cb) {
 		$http.post('/logout').then(function(resp) {
-			cb(resp.data.success);
+			cb(resp.data.url);
 		});
 	};
 	serv.addTask = function(name, cb) {
-			var req = {
-				name : name
-			};
-			$http.post('/addTask', req).then(function(resp) {
-				cb(resp.data.success);
-			});
+		var req = {
+			name : name
+		};
+		$http.post('/addTask', req).then(function(resp) {
+			cb(resp.data.success);
+		});
 	};
 	serv.getTaskSet = function(cb) {
 		$http.post('/getTaskSet').then(function(resp) {
