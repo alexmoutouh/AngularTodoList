@@ -10,19 +10,25 @@ routingApp.controller('userCtrl', ['$scope', '$http', '$window', '$cookies', 'us
                 login: $scope.log,
                 password : $scope.pass
             };
+
+            msg = "Connexion...";
+            $scope.msg = msg;
+            document.getElementById("msgLog").style.display = "flex";
+            document.getElementById("msgLog").style.color = "green";
             userService.login(logData, function(success) {
                 if(!success) {
                     error = true;
                     msg = "Mauvais login ou mot de passe";
-                    document.getElementById("msgLog").style.display = "flex";
                     $scope.msg = msg;
+                    document.getElementById("msgLog").style.color = "red";
+                    document.getElementById("msgLog").style.display = "flex";
                 } else {
                     // on a dit que c'etait pas une appli securisee
                     var expired = new Date();
                     expired.setDate(expired.getDate() + 1);
                     $cookies.put('user', logData.login, {expires : expired });
                     $cookies.put('passwd', logData.password, {expires : expired });
-                    console.log('expiration cookie : ' + expired);
+                    // console.log('expiration cookie : ' + expired);
                     $window.location.href = "/#!/todo";
                 }
             });
@@ -38,6 +44,10 @@ routingApp.controller('userCtrl', ['$scope', '$http', '$window', '$cookies', 'us
                 password : $scope.pass
             }
 
+            msg = "Inscription...";
+            $scope.msg = msg;
+            document.getElementById("msgLog").style.display = "flex";
+            document.getElementById("msgLog").style.color = "blue";
             userService.register(regData, function(success) {
                 if(!success) {
                     error = true;
@@ -64,7 +74,7 @@ routingApp.controller('userCtrl', ['$scope', '$http', '$window', '$cookies', 'us
                             expired.setDate(expired.getDate() + 1);
                             $cookies.put('user', regData.login, {expires : expired });
                             $cookies.put('passwd', regData.password, {expires : expired });
-                            console.log('expiration cookie : ' + expired);
+                            // console.log('expiration cookie : ' + expired);
                             $window.location.href = "/#!/todo";
                         }
                     });

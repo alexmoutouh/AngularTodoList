@@ -30,8 +30,10 @@ avec node :
 "node <chemin_vers_createDBSample.js>"
 
 Un base de donnees nommee todo sera alors creee. Elle contient la collection 
--users remplie avec l'utilisateur "Bob Bob"
--tasks remplie avec 50 taches nommees "taskI" avec I = 0 -> 49
+-users remplie avec l'utilisateur : 
+	login : "Bob"
+	mot de passe : "Bob"
+-tasks remplie avec 10 taches nommees "taskI" avec I = 0 -> 9
 
 -----------------
 Lancer le serveur

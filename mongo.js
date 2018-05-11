@@ -29,19 +29,19 @@ var UserModel = mongoose.model('users', UserSchema);
 
 module.exports = {
 	loginCheck: function(checkData, cb) {
-		console.log("Searching " + checkData.login + " " + checkData.password + "...");
+		// console.log("Searching " + checkData.login + " " + checkData.password + "...");
 		UserModel.findOne({login: checkData.login, password: checkData.password}, function(err, userSet) {
 			if(err) throw err;
-			console.log("mongo found " + userSet);
+			// console.log("mongo found " + userSet);
 			cb(userSet);
 		});
 	},
 	regCheck: function(checkData, cb) {
-		console.log("Searching " + checkData.login + " " + checkData.password + "...");
-		UserModel.findOne({login: checkData.login, password: checkData.password}, function(err, userSet) {
+		// console.log("Searching " + checkData.login + " " + checkData.password + "...");
+		UserModel.findOne({login: checkData.login}, function(err, userSet) {
 			if(err) throw err;
 
-			console.log("mongo found " + userSet);
+			// console.log("mongo found " + userSet);
 
 			if(!userSet) {
 				var userSamp = new UserModel({
@@ -66,7 +66,7 @@ module.exports = {
 			if(userSet != null) {
 				TaskModel.find({user: user.username}, function(err, taskSet) {
 					if(err) throw err;
-					console.log(user + "'s taskset : " + taskSet);
+					// console.log(user + "'s taskset : " + taskSet);
 					cb(taskSet);
 				});
 			}

@@ -16,8 +16,8 @@ var cpt = 0;
 var TaskSchema = Schema({
 	_id: String,
 	taskName: String,
-    done: Boolean, 
-    userID: String
+	done: Boolean,
+	user: String
 });
 var TaskModel = mongoose.model('tasks', TaskSchema);
 var createTask = function() {
@@ -25,12 +25,12 @@ var createTask = function() {
         _id: uuidv4(),
         taskName: "task" + cpt++,
         done: false,
-        userID: "123"
+        user: "Bob"
     });
 
     taskSamp.save(function(err) {
         if(err) {throw err;}
-        if(cpt == 50) {
+        if(cpt == 10) {
             console.log('done');
             process.exit(0);
         } else {
@@ -49,10 +49,8 @@ var UserSchema = Schema({
 var UserModel = mongoose.model('users', UserSchema);
 var userSamp = new UserModel({
     _id: "123",
-    login: "login",
-    password: "password",
-    firstname: "Bob",
-    lastname: "Bob"
+    login: "Bob",
+    password: "Bob",
 });
 
 userSamp.save(function(err) {

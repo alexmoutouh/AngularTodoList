@@ -10,20 +10,20 @@ routingApp.controller('todoCtrl', ['$scope', '$http', '$window', '$cookies', 'to
         $scope.taskSet = [];
 
         $scope.getUser = function() {
-            console.log("getting user...");
+            // console.log("getting user...");
 
             if(user.username) {
-                console.log("user retrieved");
+                // console.log("user retrieved");
                 $scope.user = user.username;
             } else {
                 $window.location.href = "/#!/signin";
             }
         };
         $scope.logout = function() {
-            console.log("logging out...");
+            // console.log("logging out...");
             todoService.logout(user, function(url) {
                 if(!url) {
-                    console.log("An error occured while logging out.");
+                    // console.log("An error occured while logging out.");
                 } else {
                     $cookies.remove('user');
                     $cookies.remove('passwd');
@@ -32,7 +32,7 @@ routingApp.controller('todoCtrl', ['$scope', '$http', '$window', '$cookies', 'to
             });
         };
         $scope.addTask = function() {
-            console.log("adding...")
+            // console.log("adding...")
             if($scope.taskName) {
                 todoService.addTask($scope.taskName, user, function(resp) {
                     if(resp) {
@@ -58,7 +58,7 @@ routingApp.controller('todoCtrl', ['$scope', '$http', '$window', '$cookies', 'to
             });
         };
         $scope.refreshTaskSet = function() {
-            console.log("refreshing...");
+            // console.log("refreshing...");
             todoService.getTaskSet(user, function(taskSet) {
                 $scope.taskSet = taskSet;
             });
