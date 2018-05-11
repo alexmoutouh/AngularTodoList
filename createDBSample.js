@@ -3,7 +3,7 @@ var uuidv4 = require('uuid/v4');
 
 var Schema = mongoose.Schema;
 
-var db = mongoose.connect('mongodb://localhost/myTodoDB', function(err) {
+var db = mongoose.connect('mongodb://localhost/todo', function(err) {
 	if(err) {
 		throw err;
 	} else {
@@ -11,12 +11,33 @@ var db = mongoose.connect('mongodb://localhost/myTodoDB', function(err) {
 	}
 });
 
+var cpt = 0;
+
 var TaskSchema = Schema({
 	_id: String,
 	taskName: String,
     done: Boolean, 
     userID: String
 });
+var TaskModel = mongoose.model('tasks', TaskSchema);
+var createTask = function() {
+    var taskSamp = new TaskModel({
+        _id: uuidv4(),
+        taskName: "task" + cpt++,
+        done: false,
+        userID: "123"
+    });
+
+    taskSamp.save(function(err) {
+        if(err) {throw err;}
+        if(cpt == 50) {
+            console.log('done');
+            process.exit(0);
+        } else {
+            createTask();
+        }
+    });
+}
 
 var UserSchema = Schema({
     _id: String,
@@ -25,30 +46,16 @@ var UserSchema = Schema({
     firstname: String,
     lastname: String
 })
-
-var TaskModel = mongoose.model('tasks', TaskSchema);
-for(i = 0; i < 50; ++i) {
-    var taskSamp = new TaskModel({
-        _id: uuidv4(),
-        taskName: "task" + i,
-        done: false,
-        userID: "123"
-    });
-
-    taskSamp.save(function(err) {
-        if(err) {throw err;}
-    });
-}
-
 var UserModel = mongoose.model('users', UserSchema);
 var userSamp = new UserModel({
     _id: "123",
     login: "login",
     password: "password",
     firstname: "Bob",
-    lastname: "Blob"
+    lastname: "Bob"
 });
 
 userSamp.save(function(err) {
     if(err) {throw err;}
+    createTask();
 });

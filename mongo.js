@@ -60,10 +60,16 @@ module.exports = {
 		});
 	},
 	getTaskSet: function(user, cb) {
-		TaskModel.find({user: user}, function(err, taskSet) {
-			if(err) throw err;
-			console.log(user + "'s taskset : " + taskSet);
-			cb(taskSet);
+		// donnees dans le cookie
+		UserModel.find({login: user.username, password: user.passwd}, function(err, userSet) {
+			// user "authentifie"
+			if(userSet != null) {
+				TaskModel.find({user: user.username}, function(err, taskSet) {
+					if(err) throw err;
+					console.log(user + "'s taskset : " + taskSet);
+					cb(taskSet);
+				});
+			}
 		});
 	},
 	addTaskSet: function(task, cb) {

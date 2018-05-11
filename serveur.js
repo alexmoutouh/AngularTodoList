@@ -1,3 +1,13 @@
+// argv[0] : node
+// 1 : serveur.js
+// 2 : port
+if(process.argv.length < 3) {
+	console.log("ERREUR : nombre d'arguments invalide.");
+	console.log("Usage : node " + process.argv[1] + " <port>");
+
+	return 1;
+}
+
 var path = require('path');
 var url = require('url');
 var express = require('express');
@@ -18,9 +28,18 @@ app.use(function(req, res, next) {
 	next();
 });
 
-var taskSet = [];
-var port = 8092;
+var port = process.argv[2];
 var userID = null;
+var connections = [];
+var findCo = function(user, pass) {
+	for(var i = 0; i < connections.length; ++i) {
+		if(connections[i].user == user && connections[i].password == pass) {
+			return {index: i, co: connections[i]};
+		}
+	}
+
+	return null;
+}
 
 app.post('/login', function(req, res) {
 	console.log("Trying login " + req.body.login + " " + req.body.password + "... ");
@@ -29,18 +48,22 @@ app.post('/login', function(req, res) {
 		if(user != null) {
 			console.log("login success");
 			userID = user.login;
+			connections.push({
+				user: user.login, 
+				password: user.password, 
+			});
 			var obj = {
 				success: true
 			};
+			res.send(obj);
 		} else {
 			console.log("login fail");
 			var obj = {
 				success: false,
 				msgError: "Mauvais login ou mot de passe"
 			};
+			res.send(obj);
 		}
-
-		res.send(obj);
 	});
 });
 
@@ -63,22 +86,16 @@ app.post('/register', function(req, res) {
 	});
 });
 
-app.post('/getUser', function(req, res) {
-	console.log("getUser : " + userID);
-	var obj = {
-		user: userID
-	};
-	res.send(obj);
-});
-
 app.post('/logout', function(req, res) {
-	userID = null;
-	taskSet.length = 0; // clear
-	res.send({url: '/'});
+	var co = findCo(req.body.username, req.body.passwd);
+	if(co) {
+		connections.splice(co.index, 1);
+		res.send({url: '/'});
+	}
 });
 
 app.post('/getTaskSet', function(req, res) {
-	dataTaskLayer.getTaskSet(userID, function(taskSet) {	
+	dataTaskLayer.getTaskSet(req.body.user, function(taskSet) {	
 		var obj = {
 			success: true,
 			taskSet: taskSet
@@ -95,21 +112,27 @@ app.post('/addTask', function(req, res) {
 			errorSet: ['TASKNAME_EMPTY']
 		});
 	} else {
-		var userTask = {
-			name: req.body.name,
-			done: false,
-			user: userID
-		}
-		dataTaskLayer.addTaskSet(userTask, function() {
-			var task = {
-				_id : uuidv4(),
-				taskName : req.body.name,
-				done: false
-			};
+		if(!req.body.user) {
+			res.send({ 
+				success: false, 
+				errorSet: ['UNKNOWN_USER']
+			});
+		} else {
+			var userTask = {
+				name: req.body.name,
+				done: false,
+				user: req.body.user.username
+			}
+			dataTaskLayer.addTaskSet(userTask, function() {
+				var task = {
+					_id : uuidv4(),
+					taskName : req.body.name,
+					done: false
+				};
 	
-			taskSet.push(task);
-			res.send({success: true});
-		});
+				res.send({success: true});
+			});
+		}
 	}
 });
 
