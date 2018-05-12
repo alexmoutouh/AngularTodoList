@@ -38,13 +38,14 @@ Un base de donnees nommee todo sera alors creee. Elle contient la collection
 -----------------
 Lancer le serveur
 -----------------
-Lancer mongodb (mogod.exe) au prealable.
+Lancer mongodb (mongod.exe) au prealable.
 Dans une console, lancer le serveur avec node.
 usage : "node <chemin_vers_serveur.js> <numero_de_port>"
 
 -------------------
 Utiliser le serveur
 -------------------
+L'adresse url est http://localhost:<numero_de_port>
 -Se connecter ou s'inscrire(immediatement connecte dans ce cas)
 -Utiliser la todo list : 
 	-Ajouter tache
