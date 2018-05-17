@@ -1,6 +1,10 @@
 routingApp.factory('todoService', ['$http', function($http) {
 	var serv = {};
-
+	serv.checkLogin = function(dataLog, cb) {
+        $http.post('/login', dataLog).then(function(resp) {
+            cb(resp.data.success);
+        });
+    };
 	serv.logout = function(user, cb) {
 		$http.post('/logout', user).then(function(resp) {
 			cb(resp.data.url);
@@ -33,10 +37,10 @@ routingApp.factory('todoService', ['$http', function($http) {
 		});
 	};
 
-	serv.saveTaskSet = function(task, user, cb) {
+	serv.saveTaskSet = function(task, cb) {
 	    var req = {
-			id: task,
-			user : user
+			id: task._id,
+			done: task.done
 	    };
 	    $http.post('/saveTaskSet', req).then(function(resp) {
 		    cb(resp.data.success);

@@ -28,7 +28,7 @@ routingApp.controller('userCtrl', ['$scope', '$http', '$window', '$cookies', 'us
                     expired.setDate(expired.getDate() + 1);
                     $cookies.put('user', logData.login, {expires : expired });
                     $cookies.put('passwd', logData.password, {expires : expired });
-                    // console.log('expiration cookie : ' + expired);
+                    console.log('expiration cookie : ' + expired);
                     $window.location.href = "/#!/todo";
                 }
             });
@@ -74,7 +74,7 @@ routingApp.controller('userCtrl', ['$scope', '$http', '$window', '$cookies', 'us
                             expired.setDate(expired.getDate() + 1);
                             $cookies.put('user', regData.login, {expires : expired });
                             $cookies.put('passwd', regData.password, {expires : expired });
-                            // console.log('expiration cookie : ' + expired);
+                            console.log('expiration cookie : ' + expired);
                             $window.location.href = "/#!/todo";
                         }
                     });

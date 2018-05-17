@@ -1,15 +1,5 @@
-// argv[0] : node
-// 1 : serveur.js
-// 2 : port
-if(process.argv.length < 3) {
-	console.log("ERREUR : nombre d'arguments invalide.");
-	console.log("Usage : node " + process.argv[1] + " <port>");
-
-	return 1;
-}
-
 var path = require('path');
-var url = require('url');
+var fs = require('fs');
 var express = require('express');
 var bodyParser = require('body-parser');
 var uuidv4 = require('uuid/v4');
@@ -28,9 +18,11 @@ app.use(function(req, res, next) {
 	next();
 });
 
-var port = process.argv[2];
-var userID = null;
-var connections = [];
+var contents = fs.readFileSync("servConfig.json"); // lecture synchrone
+var jsonContent = JSON.parse(contents);
+
+var port = jsonContent.port;
+var connections = []; // tableau des connexions actives
 var findCo = function(user, pass) {
 	for(var i = 0; i < connections.length; ++i) {
 		if(connections[i].user == user && connections[i].password == pass) {
@@ -42,22 +34,24 @@ var findCo = function(user, pass) {
 }
 
 app.post('/login', function(req, res) {
-	// console.log("Trying login " + req.body.login + " " + req.body.password + "... ");
+	console.log("Trying login " + req.body.login + " " + req.body.password + "... ");
 	dataTaskLayer.loginCheck(req.body, function(user) {
-		// console.log("Found " + user);
+		console.log("Found " + user);
 		if(user != null) {
-			// console.log("login success");
-			userID = user.login;
-			connections.push({
-				user: user.login, 
-				password: user.password, 
-			});
+			console.log("login success");
+			var co = findCo(user.login, user.password);
+			if(!co) {
+				connections.push({
+					user: user.login, 
+					password: user.password, 
+				});
+			}
 			var obj = {
 				success: true
 			};
 			res.send(obj);
 		} else {
-			// console.log("login fail");
+			console.log("login fail");
 			var obj = {
 				success: false,
 				msgError: "Mauvais login ou mot de passe"
@@ -69,14 +63,14 @@ app.post('/login', function(req, res) {
 
 app.post('/register', function(req, res) {
 	dataTaskLayer.regCheck(req.body, function(success) {
-		// console.log("Registering " + req.body.login + " " + req.body.password + "... ");
+		console.log("Registering " + req.body.login + " " + req.body.password + "... ");
 		if(!success) {
-			// console.log("Found : " + success + "fail");
+			console.log("Found : " + success + "fail");
 			var obj = {
 				success: false
 			};
 		} else {
-			// console.log("Found " + success + "success");
+			console.log("Found " + success + "success");
 			var obj = {
 				success: true
 			};
@@ -87,9 +81,10 @@ app.post('/register', function(req, res) {
 });
 
 app.post('/logout', function(req, res) {
-	var co = findCo(req.body.username, req.body.passwd);
-	if(co) {
-		connections.splice(co.index, 1);
+	console.log("logging out " + req.body.login + " " + req.body.password + "...")
+	var co = findCo(req.body.login, req.body.password);
+	if(co != null) {
+		connections.splice(co.index, 1); // suppression du tableau des connexions actives
 		res.send({url: '/'});
 	}
 });
@@ -121,7 +116,7 @@ app.post('/addTask', function(req, res) {
 			var userTask = {
 				name: req.body.name,
 				done: false,
-				user: req.body.user.username
+				user: req.body.user.login
 			}
 			dataTaskLayer.addTaskSet(userTask, function() {
 				var task = {
@@ -156,11 +151,11 @@ app.post('/saveTaskSet', function(req, res) {
 			errorSet: ['TASKNAME_EMPTY']
 		});
     } else {
-        dataTaskLayer.saveTaskSet(req.body.id, function () {
+        dataTaskLayer.saveTaskSet(req.body, function () {
             res.send({success: true});
         });
     }
 });
 
 app.listen(port);
-console.log('server start port : ' + port);
+console.log('Serveur demarre sur le port : ' + port);

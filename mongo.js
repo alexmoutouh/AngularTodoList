@@ -1,13 +1,18 @@
+var fs = require('fs');
 var mongoose = require('mongoose');
 var uuidv4 = require('uuid/v4');
 
+var contents = fs.readFileSync("servConfig.json"); // lecture synchrone
+var jsonContent = JSON.parse(contents);
+
+var dbUrl = jsonContent.db;
 var Schema = mongoose.Schema;
 
-mongoose.connect('mongodb://localhost/todo', function(err) {
+mongoose.connect(dbUrl, function(err) {
 	if(err) {
 		throw err;
 	} else {
-		console.log('mongo conneted');
+		console.log("MongoDB a l'adresse " + jsonContent.db);
 	}
 });
 
@@ -29,19 +34,19 @@ var UserModel = mongoose.model('users', UserSchema);
 
 module.exports = {
 	loginCheck: function(checkData, cb) {
-		// console.log("Searching " + checkData.login + " " + checkData.password + "...");
+		console.log("Searching " + checkData.login + " " + checkData.password + "...");
 		UserModel.findOne({login: checkData.login, password: checkData.password}, function(err, userSet) {
 			if(err) throw err;
-			// console.log("mongo found " + userSet);
+			console.log("mongo found " + userSet);
 			cb(userSet);
 		});
 	},
 	regCheck: function(checkData, cb) {
-		// console.log("Searching " + checkData.login + " " + checkData.password + "...");
+		console.log("Searching " + checkData.login + " " + checkData.password + "...");
 		UserModel.findOne({login: checkData.login}, function(err, userSet) {
 			if(err) throw err;
 
-			// console.log("mongo found " + userSet);
+			console.log("mongo found " + userSet);
 
 			if(!userSet) {
 				var userSamp = new UserModel({
@@ -61,12 +66,13 @@ module.exports = {
 	},
 	getTaskSet: function(user, cb) {
 		// donnees dans le cookie
-		UserModel.find({login: user.username, password: user.passwd}, function(err, userSet) {
+		console.log("getting " + user.login + " " + user.password + " taskset...")
+		UserModel.find({login: user.login, password: user.password}, function(err, userSet) {
 			// user "authentifie"
 			if(userSet != null) {
-				TaskModel.find({user: user.username}, function(err, taskSet) {
+				TaskModel.find({user: user.login}, function(err, taskSet) {
 					if(err) throw err;
-					// console.log(user + "'s taskset : " + taskSet);
+					console.log(user.login + "'s taskset : " + taskSet);
 					cb(taskSet);
 				});
 			}
@@ -91,8 +97,9 @@ module.exports = {
 	        cb();
 	    });
 	},
-	saveTaskSet: function(taskId, cb) {
-	    TaskModel.findOneAndUpdate({_id: taskId}, {done: true}, function(err) {
+	saveTaskSet: function(task, cb) {
+		console.log("updating " + task.id + " to " + task.done)
+	    TaskModel.findOneAndUpdate({_id: task.id}, {done: task.done}, function(err) {
 	        if(err) {throw err;}
 	        cb();
 	    });
