@@ -34,11 +34,11 @@ var findCo = function(user, pass) {
 }
 
 app.post('/login', function(req, res) {
-	console.log("Trying login " + req.body.login + " " + req.body.password + "... ");
+	// console.log("Trying login " + req.body.login + " " + req.body.password + "... ");
 	dataTaskLayer.loginCheck(req.body, function(user) {
-		console.log("Found " + user);
+		// console.log("Found " + user);
 		if(user != null) {
-			console.log("login success");
+			// console.log("login success");
 			var co = findCo(user.login, user.password);
 			if(!co) {
 				connections.push({
@@ -51,7 +51,7 @@ app.post('/login', function(req, res) {
 			};
 			res.send(obj);
 		} else {
-			console.log("login fail");
+			// console.log("login fail");
 			var obj = {
 				success: false,
 				msgError: "Mauvais login ou mot de passe"
@@ -61,16 +61,27 @@ app.post('/login', function(req, res) {
 	});
 });
 
+app.post('/checkConnection', function(req, res) {
+	// console.log("Checking connection " + req.body.login + " " + req.body.password + "... ");
+	var co = findCo(req.body.login, req.body.password);
+	var obj;
+	if(!co) {
+		res.send({success: false});
+	} else {
+		res.send({success: true});
+	}
+});
+
 app.post('/register', function(req, res) {
 	dataTaskLayer.regCheck(req.body, function(success) {
-		console.log("Registering " + req.body.login + " " + req.body.password + "... ");
+		// console.log("Registering " + req.body.login + " " + req.body.password + "... ");
 		if(!success) {
-			console.log("Found : " + success + "fail");
+			// console.log("Found : " + success + "fail");
 			var obj = {
 				success: false
 			};
 		} else {
-			console.log("Found " + success + "success");
+			// console.log("Found " + success + "success");
 			var obj = {
 				success: true
 			};
@@ -81,7 +92,7 @@ app.post('/register', function(req, res) {
 });
 
 app.post('/logout', function(req, res) {
-	console.log("logging out " + req.body.login + " " + req.body.password + "...")
+	// console.log("logging out " + req.body.login + " " + req.body.password + "...")
 	var co = findCo(req.body.login, req.body.password);
 	if(co != null) {
 		connections.splice(co.index, 1); // suppression du tableau des connexions actives

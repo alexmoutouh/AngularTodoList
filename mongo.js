@@ -34,19 +34,19 @@ var UserModel = mongoose.model('users', UserSchema);
 
 module.exports = {
 	loginCheck: function(checkData, cb) {
-		console.log("Searching " + checkData.login + " " + checkData.password + "...");
+		// console.log("Searching " + checkData.login + " " + checkData.password + "...");
 		UserModel.findOne({login: checkData.login, password: checkData.password}, function(err, userSet) {
 			if(err) throw err;
-			console.log("mongo found " + userSet);
+			// console.log("mongo found " + userSet);
 			cb(userSet);
 		});
 	},
 	regCheck: function(checkData, cb) {
-		console.log("Searching " + checkData.login + " " + checkData.password + "...");
+		// console.log("Searching " + checkData.login + " " + checkData.password + "...");
 		UserModel.findOne({login: checkData.login}, function(err, userSet) {
 			if(err) throw err;
 
-			console.log("mongo found " + userSet);
+			// console.log("mongo found " + userSet);
 
 			if(!userSet) {
 				var userSamp = new UserModel({
@@ -64,15 +64,14 @@ module.exports = {
 			}
 		});
 	},
-	getTaskSet: function(user, cb) {
-		// donnees dans le cookie
-		console.log("getting " + user.login + " " + user.password + " taskset...")
+	getTaskSet: function(user, cb) { // donnees dans le cookie
+		// console.log("getting " + user.login + " " + user.password + " taskset...")
 		UserModel.find({login: user.login, password: user.password}, function(err, userSet) {
 			// user "authentifie"
 			if(userSet != null) {
 				TaskModel.find({user: user.login}, function(err, taskSet) {
 					if(err) throw err;
-					console.log(user.login + "'s taskset : " + taskSet);
+					// console.log(user.login + "'s taskset : " + taskSet);
 					cb(taskSet);
 				});
 			}
@@ -98,7 +97,7 @@ module.exports = {
 	    });
 	},
 	saveTaskSet: function(task, cb) {
-		console.log("updating " + task.id + " to " + task.done)
+		// console.log("updating " + task.id + " to " + task.done)
 	    TaskModel.findOneAndUpdate({_id: task.id}, {done: task.done}, function(err) {
 	        if(err) {throw err;}
 	        cb();

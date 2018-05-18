@@ -1,4 +1,4 @@
 {
-    "port": 8080,
-    "db": "mongodb://localhost/todo"
+    "port": 8051,
+    "db": "mongodb://localhost/TODO"
 }

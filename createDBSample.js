@@ -1,13 +1,19 @@
+var fs = require('fs');
 var mongoose = require('mongoose');
 var uuidv4 = require('uuid/v4');
 
+var contents = fs.readFileSync("servConfig.json"); // lecture synchrone
+var jsonContent = JSON.parse(contents);
+
+var dbUrl = jsonContent.db;
 var Schema = mongoose.Schema;
 
-var db = mongoose.connect('mongodb://localhost/todo', function(err) {
+var db = mongoose.connect(dbUrl, function(err) {
 	if(err) {
 		throw err;
 	} else {
-		console.log('mongo Tasks conneted');
+        console.log('Connecte a mongoDB : ' + dbUrl);
+        console.log('Creation du jeu de donnees...');
 	}
 });
 
@@ -31,7 +37,7 @@ var createTask = function() {
     taskSamp.save(function(err) {
         if(err) {throw err;}
         if(cpt == 10) {
-            console.log('done');
+            console.log('Fait.');
             process.exit(0);
         } else {
             createTask();

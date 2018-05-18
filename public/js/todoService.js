@@ -1,7 +1,7 @@
 routingApp.factory('todoService', ['$http', function($http) {
 	var serv = {};
 	serv.checkLogin = function(dataLog, cb) {
-        $http.post('/login', dataLog).then(function(resp) {
+        $http.post('/checkConnection', dataLog).then(function(resp) {
             cb(resp.data.success);
         });
     };

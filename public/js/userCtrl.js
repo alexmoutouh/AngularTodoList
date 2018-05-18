@@ -1,6 +1,5 @@
 routingApp.controller('userCtrl', ['$scope', '$http', '$window', '$cookies', 'userService', function($scope, $http, $window, $cookies, userService) {
     var error = false;
-    var msg = "";
 
     document.getElementById("msgLog").style.display = "none";
 
@@ -23,13 +22,13 @@ routingApp.controller('userCtrl', ['$scope', '$http', '$window', '$cookies', 'us
                     document.getElementById("msgLog").style.color = "red";
                     document.getElementById("msgLog").style.display = "flex";
                 } else {
-                    // on a dit que c'etait pas une appli securisee
+                    // on a dit qu'il ne s'agissait pas une appli securisee
                     var expired = new Date();
-                    expired.setDate(expired.getDate() + 1);
+                    expired.setDate(expired.getDate() + 1); // date d'expiration des cookies : dans 1 jour
                     $cookies.put('user', logData.login, {expires : expired });
                     $cookies.put('passwd', logData.password, {expires : expired });
-                    console.log('expiration cookie : ' + expired);
-                    $window.location.href = "/#!/todo";
+                    console.log('cookies expire  : ' + expired);
+                    $window.location.href = "/#!/todo"; // acces a la todo liste
                 }
             });
         } else {
@@ -57,11 +56,12 @@ routingApp.controller('userCtrl', ['$scope', '$http', '$window', '$cookies', 'us
                     document.getElementById("msgLog").style.color = "red";
                 } else {
                     error = false;
-                    msg = "Utilisateur créé redirection...";
+                    msg = "Utilisateur créé. Redirection...";
                     $scope.msg = msg;
                     document.getElementById("msgLog").style.display = "flex";
                     document.getElementById("msgLog").style.color = "green";
 
+                    // une fois l'utilisateur cree, login automatique avec les donnees d'inscription
                     userService.login(regData, function(success) {
                         if(!success) {
                             error = true;
@@ -69,12 +69,12 @@ routingApp.controller('userCtrl', ['$scope', '$http', '$window', '$cookies', 'us
                             document.getElementById("msgLog").style.display = "flex";
                             $scope.msg = msg;
                         } else {
-                            // on a dit que c'etait pas une appli securisee
+                            // on a dit qu'il ne s'agissait pas une appli securisee
                             var expired = new Date();
-                            expired.setDate(expired.getDate() + 1);
+                            expired.setDate(expired.getDate() + 1); // date d'expiration des cookies : dans 1 jour
                             $cookies.put('user', regData.login, {expires : expired });
                             $cookies.put('passwd', regData.password, {expires : expired });
-                            console.log('expiration cookie : ' + expired);
+                            console.log('cookie expire : ' + expired);
                             $window.location.href = "/#!/todo";
                         }
                     });
