@@ -8,6 +8,7 @@ routingApp.controller('todoCtrl', ['$scope', '$http', '$window', '$cookies', 'to
         login: $cookies.get('user'),
         password: $cookies.get('passwd')
     }
+    // console.log(user);
 
     if(!user.login || !user.password) { 
         $window.location.href = "/#!/signin"; // redirection vers la page de connexion

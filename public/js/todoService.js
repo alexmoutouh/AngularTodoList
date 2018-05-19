@@ -36,7 +36,6 @@ routingApp.factory('todoService', ['$http', function($http) {
 			cb(resp.data.success);
 		});
 	};
-
 	serv.saveTaskSet = function(task, cb) {
 	    var req = {
 			id: task._id,

@@ -1,5 +1,6 @@
 routingApp.controller('userCtrl', ['$scope', '$http', '$window', '$cookies', 'userService', function($scope, $http, $window, $cookies, userService) {
     var error = false;
+    var msg = "";
 
     document.getElementById("msgLog").style.display = "none";
 
@@ -35,7 +36,6 @@ routingApp.controller('userCtrl', ['$scope', '$http', '$window', '$cookies', 'us
             $scope.msgLog = "Veuillez saisir tous les champs";
         }
     };
-
     $scope.register = function() {
         if($scope.log && $scope.pass) {
             var regData = {
