@@ -77,6 +77,12 @@ Remarques
 Tant qu'ils ne sont pas expires, l'utilisateur n'a pas besoin de se reconnecter et 
 peut directement reacceder a sa todo liste en rentrant son url : 
 	http://localhost:<numero_de_port>/#!/todo
+Les cookies sont valables tant que la date d'expiration n'est pas arrivee a son terme 
+ou qu'un autre utilisateur ne s'est pas connecte sur le meme navigateur (dans ce cas les 
+cookies sont ecrases avec les information du nouvel utilisateur).
+Ainsi, il est vivement conseille a l'utilisateur de se deconnecter en cliquant sur le bouton 
+de Deconnexion une fois qu'il a fini d'utiliser l'application pour eviter le risque qu'un autre
+utilisateur puisse potentiellement acceder a son compte.
 Si les cookies ne sont plus valables, l'utilisateur est redirige vers la page de 
 connexion.
 -Plusieurs utilisateurs peuvent etre connectes en meme temps (depuis des navigateurs 
