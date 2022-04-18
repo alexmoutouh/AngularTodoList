@@ -1,6 +1,6 @@
 var fs = require('fs');
 var mongoose = require('mongoose');
-var uuidv4 = require('uuid/v4');
+const { uuid } = require('uuidv4');
 
 var contents = fs.readFileSync("servConfig.json"); // lecture synchrone
 var jsonContent = JSON.parse(contents);
@@ -28,7 +28,7 @@ var TaskSchema = Schema({
 var TaskModel = mongoose.model('tasks', TaskSchema);
 var createTask = function() {
     var taskSamp = new TaskModel({
-        _id: uuidv4(),
+        _id: uuid(),
         taskName: "task" + cpt++,
         done: false,
         user: "Bob"

@@ -2,7 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var express = require('express');
 var bodyParser = require('body-parser');
-var uuidv4 = require('uuid/v4');
+const { uuid } = require('uuidv4');
 var dataTaskLayer = require('./mongo.js');
 
 var app = express();
@@ -131,7 +131,7 @@ app.post('/addTask', function(req, res) {
 			}
 			dataTaskLayer.addTaskSet(userTask, function() {
 				var task = {
-					_id : uuidv4(),
+					_id : uuid(),
 					taskName : req.body.name,
 					done: false
 				};

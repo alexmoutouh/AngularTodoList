@@ -1,6 +1,6 @@
 var fs = require('fs');
 var mongoose = require('mongoose');
-var uuidv4 = require('uuid/v4');
+const { uuid } = require('uuidv4');
 
 var contents = fs.readFileSync("servConfig.json"); // lecture synchrone
 var jsonContent = JSON.parse(contents);
@@ -50,7 +50,7 @@ module.exports = {
 
 			if(!userSet) {
 				var userSamp = new UserModel({
-					_id: uuidv4(),
+					_id: uuid(),
 					login: checkData.login,
 					password: checkData.password 
 				});
@@ -79,7 +79,7 @@ module.exports = {
 	},
 	addTaskSet: function(task, cb) {
 		var taskSamp = new TaskModel({
-			_id: uuidv4(),
+			_id: uuid(),
 			taskName: task.name,
 			done: false,
 			user: task.user
